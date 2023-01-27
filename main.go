@@ -16,28 +16,30 @@ const (
 )
 
 func main() {
-	var packageName string
-	flag.StringVar(&packageName, "name", "", "The name of the test file (without the '_test'). Default: current package name.")
+	var filename string
+	flag.StringVar(&filename, "name", "", "The name of the test file (without the '_test'). Default: current package name.")
 	flag.Parse()
 
-	if packageName != "" {
-		packageName = strings.ReplaceAll(packageName, suffix, "")
-		packageName = strings.ReplaceAll(packageName, ext, "")
+	if filename != "" {
+		filename = strings.ReplaceAll(filename, suffix, "")
+		filename = strings.ReplaceAll(filename, ext, "")
 	}
 
-	if packageName == "" {
-		path, err := os.Getwd()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	path, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
-		packageName = filepath.Base(path)
+	packageName := filepath.Base(path)
+
+	if filename == "" {
+		filename = packageName
 	}
 
 	tmpl := template.Generate(packageName)
 
-	filename := fmt.Sprintf("%s%s%s", packageName, suffix, ext)
+	filename = fmt.Sprintf("%s%s%s", filename, suffix, ext)
 	if err := os.WriteFile(filename, tmpl, 0644); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
