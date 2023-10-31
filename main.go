@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"githhub.com/warehouse-13/got/template"
+	"github.com/warehouse-13/got/template"
 )
 
 const (
